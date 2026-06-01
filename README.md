@@ -13,30 +13,42 @@ cd minimarket
 ```
 La aplicación queda disponible en http://localhost:8080.
 
+## Autenticación y pruebas (JWT)
 
-AUTENTICACION Y PRUEBAS (JWT)
-La API utiliza JSON WEB TOKENS (JWT). Para acceder a rutas protegidas, debes enviar el token en la cabcera HTTP.
+La API utiliza JSON Web Tokens (JWT). Para acceder a rutas protegidas, debes enviar el token en la cabecera HTTP `Authorization: Bearer <token>`.
 
--  Obtener Token (login):
-   
+**Obtener token (login):**
+
+```bash
 curl -X POST http://localhost:8080/api/auth/login \
--H "Content-Type: application/json" \
--d '{"username":"admin", "password":"admin123"}'
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin", "password":"admin123"}'
+```
 
--  Consumir endopoint protegido:
+**Registrar nuevo usuario:**
 
+```bash
+curl -X POST http://localhost:8080/api/auth/registro \
+  -H "Content-Type: application/json" \
+  -d '{"username":"nuevo", "password":"password123"}'
+```
+
+**Consumir endpoint protegido:**
+
+```bash
 curl -X GET http://localhost:8080/api/ventas \
--H "Authorization: Bearer <TU_TOKEN_AQUI>"
+  -H "Authorization: Bearer <TU_TOKEN_AQUI>"
+```
 
- 
- BASE DE DATOS (entorno local)
-   Consola H2: http://localhost:8080/h2-console
-   JDBC URL: jdbc:h2:mem:minimarketdb
-   Usuario: sa
-   contraseña: (vacia)
+## Base de datos (entorno local)
 
+* Consola H2: http://localhost:8080/h2-console
+* JDBC URL: `jdbc:h2:mem:minimarketdb`
+* Usuario: `sa`
+* Contraseña: (vacía)
 
-##   USUARIOS DE PRUEBA:  
+## Usuarios de prueba
+
 | Usuario   | Contraseña    | Rol      |
 |-----------|---------------|----------|
 | admin     | admin123      | ADMIN    |
@@ -44,8 +56,7 @@ curl -X GET http://localhost:8080/api/ventas \
 | empleado  | empleado123   | EMPLEADO |
 | cliente   | cliente123    | CLIENTE  |
 
-
-##ROLES Y PERMISOS:
+## Roles y permisos
 
 | Recurso | Público | CLIENTE | EMPLEADO | GERENTE | ADMIN |
 |---------|---------|---------|----------|---------|-------|
@@ -59,10 +70,9 @@ curl -X GET http://localhost:8080/api/ventas \
 | Usuarios | — | — | — | — | Si |
 | /public/** | Si | Si | Si | Si | Si |
 
-##TEST:
-``` bash
+## Tests
+
+```bash
 cd minimarket
 ./mvnw clean test
 ```
-   
- 

@@ -1,0 +1,8 @@
+com/minimarket/security/TestRole.class
+com/minimarket/security/AccessOutcome.class
+com/minimarket/security/JwtTestHelper.class
+com/minimarket/security/SecurityRbacIntegrationTest$1.class
+com/minimarket/security/RbacScenario.class
+com/minimarket/security/JwtAuthIntegrationTest.class
+com/minimarket/security/SecurityRbacIntegrationTest.class
+com/minimarket/MinimarketApplicationTests.class
