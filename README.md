@@ -9,7 +9,7 @@ Backend REST para la gestión de un minimarket, desarrollado con Spring Boot 3 y
 ## Ejecución local
 ```bash
 cd minimarket
-./mvnw spring-boot:run
+mvn spring-boot:run
 ```
 La aplicación queda disponible en http://localhost:8080.
 
@@ -74,5 +74,5 @@ curl -X GET http://localhost:8080/api/ventas \
 
 ```bash
 cd minimarket
-./mvnw clean test
+mvn clean test
 ```
