@@ -3,13 +3,15 @@ package com.minimarket.controller;
 import com.minimarket.security.model.AuthResponse;
 import com.minimarket.security.model.LoginRequest;
 import com.minimarket.security.model.RegistroRequest;
-import com.minimarket.security.util.JwtUtil;
+import com.minimarket.security.service.JwtTokenService;
+import com.minimarket.security.service.LoginAttemptService;
 import com.minimarket.entity.Usuario;
 import com.minimarket.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,28 +28,40 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
-    private final JwtUtil jwtUtil;
+    private final JwtTokenService jwtTokenService;
     private final UsuarioService usuarioService;
+    private final LoginAttemptService loginAttemptService;
 
     public AuthController(
             AuthenticationManager authenticationManager,
             UserDetailsService userDetailsService,
-            JwtUtil jwtUtil,
-            UsuarioService usuarioService) {
+            JwtTokenService jwtTokenService,
+            UsuarioService usuarioService,
+            LoginAttemptService loginAttemptService) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
-        this.jwtUtil = jwtUtil;
+        this.jwtTokenService = jwtTokenService;
         this.usuarioService = usuarioService;
+        this.loginAttemptService = loginAttemptService;
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> createAuthenticationToken(@Valid @RequestBody LoginRequest loginRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
-        );
+        loginAttemptService.assertNotLocked(loginRequest.getUsername());
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+            );
+        } catch (BadCredentialsException badCredentialsException) {
+            loginAttemptService.recordFailure(loginRequest.getUsername());
+            throw badCredentialsException;
+        }
+
+        loginAttemptService.recordSuccess(loginRequest.getUsername());
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
-        String jwt = jwtUtil.generateToken(userDetails);
+        String jwt = jwtTokenService.generateToken(userDetails);
 
         return ResponseEntity.ok(new AuthResponse(jwt));
     }

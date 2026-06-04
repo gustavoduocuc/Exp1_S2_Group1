@@ -1,6 +1,7 @@
 package com.minimarket.security;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SecurityRbacIntegrationTest {
 
     private static final String emptyJsonBody = "{}";
@@ -35,7 +37,7 @@ class SecurityRbacIntegrationTest {
         }
     }
 
-    @BeforeEach
+    @BeforeAll
     void setUp() throws Exception {
         authenticateTestUsers();
     }

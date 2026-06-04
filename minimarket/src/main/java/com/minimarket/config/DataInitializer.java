@@ -42,10 +42,10 @@ public class DataInitializer implements CommandLineRunner {
         Rol gerente = createRole("GERENTE");
         Rol admin = createRole("ADMIN");
 
-        createUser("admin", "admin123", admin);
-        createUser("gerente", "gerente123", gerente);
-        createUser("empleado", "empleado123", empleado);
-        createUser("cliente", "cliente123", cliente);
+        createUser("admin", "Admin123!", admin);
+        createUser("gerente", "Gerente123!", gerente);
+        createUser("empleado", "Empleado123!", empleado);
+        createUser("cliente", "Cliente123!", cliente);
 
         Categoria bebidas = createCategoria("Bebidas");
         Categoria lacteos = createCategoria("Lacteos");

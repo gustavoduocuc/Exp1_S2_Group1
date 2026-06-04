@@ -48,6 +48,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UsuarioResponseDto create(UsuarioRequestDto dto) {
+        if (dto.getPassword() == null || dto.getPassword().isBlank()) {
+            throw new IllegalArgumentException("La contraseña es obligatoria");
+        }
         Usuario usuario = new Usuario();
         usuario.setUsername(dto.getUsername());
         usuario.setPassword(encodePassword(dto.getPassword()));

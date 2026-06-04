@@ -20,10 +20,15 @@ public class SecurityConfig {
 
     private final SecurityAuditHandler securityAuditHandler;
     private final JwtRequestFilter jwtRequestFilter;
+    private final LoginRateLimitFilter loginRateLimitFilter;
 
-    public SecurityConfig(SecurityAuditHandler securityAuditHandler, JwtRequestFilter jwtRequestFilter) {
+    public SecurityConfig(
+            SecurityAuditHandler securityAuditHandler,
+            JwtRequestFilter jwtRequestFilter,
+            LoginRateLimitFilter loginRateLimitFilter) {
         this.securityAuditHandler = securityAuditHandler;
         this.jwtRequestFilter = jwtRequestFilter;
+        this.loginRateLimitFilter = loginRateLimitFilter;
     }
 
     @Bean
@@ -68,6 +73,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             );
 
+        http.addFilterBefore(loginRateLimitFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

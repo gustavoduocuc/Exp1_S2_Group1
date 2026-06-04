@@ -1,10 +1,10 @@
 package com.minimarket.security;
 
 enum TestRole {
-    CLIENTE("cliente", "cliente123"),
-    EMPLEADO("empleado", "empleado123"),
-    GERENTE("gerente", "gerente123"),
-    ADMIN("admin", "admin123");
+    CLIENTE("cliente", "Cliente123!"),
+    EMPLEADO("empleado", "Empleado123!"),
+    GERENTE("gerente", "Gerente123!"),
+    ADMIN("admin", "Admin123!");
 
     private final String username;
     private final String password;

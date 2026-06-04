@@ -3,6 +3,7 @@ package com.minimarket.controller;
 import com.minimarket.dto.UsuarioRequestDto;
 import com.minimarket.dto.UsuarioResponseDto;
 import com.minimarket.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,13 +30,13 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public UsuarioResponseDto crearUsuario(@RequestBody UsuarioRequestDto usuario) {
+    public UsuarioResponseDto crearUsuario(@Valid @RequestBody UsuarioRequestDto usuario) {
         return usuarioService.create(usuario);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioResponseDto> actualizarUsuario(@PathVariable Long id,
-                                                                @RequestBody UsuarioRequestDto usuario) {
+                                                                @Valid @RequestBody UsuarioRequestDto usuario) {
         return usuarioService.update(id, usuario)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
