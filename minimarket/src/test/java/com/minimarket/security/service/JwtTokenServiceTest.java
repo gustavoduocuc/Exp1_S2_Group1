@@ -8,7 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.lang.NonNull;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -20,13 +24,17 @@ class JwtTokenServiceTest {
     private static final String secret = "MiniMarketPlusSecretKey2026SuperSeguraYFuerte";
     private static final long expirationMs = 3_600_000L;
 
-    private JwtTokenService jwtTokenService;
+    @NonNull
+    private final JwtTokenService jwtTokenService = new JwtTokenService();
 
     @BeforeEach
     void setUp() {
-        jwtTokenService = new JwtTokenService();
-        ReflectionTestUtils.setField(jwtTokenService, "secret", secret);
-        ReflectionTestUtils.setField(jwtTokenService, "expiration", expirationMs);
+        configureJwtTokenService(jwtTokenService, expirationMs);
+    }
+
+    private void configureJwtTokenService(@NonNull JwtTokenService service, long expiration) {
+        ReflectionTestUtils.setField(Objects.requireNonNull(service), "secret", secret);
+        ReflectionTestUtils.setField(Objects.requireNonNull(service), "expiration", expiration);
     }
 
     @Test
@@ -70,5 +78,19 @@ class JwtTokenServiceTest {
         JwtClaims claims = jwtTokenService.parseToken(token);
 
         assertFalse(jwtTokenService.isTokenValidForUser(claims, other));
+    }
+
+    @Test
+    void rejectsExpiredToken() {
+        JwtTokenService serviceWithExpiredTokens = new JwtTokenService();
+        configureJwtTokenService(serviceWithExpiredTokens, -1000L);
+
+        UserDetails userDetails = new User("admin", "pass", List.of());
+        String expiredToken = serviceWithExpiredTokens.generateToken(userDetails);
+
+        InvalidJwtException exception = assertThrows(InvalidJwtException.class,
+                () -> serviceWithExpiredTokens.parseToken(expiredToken));
+
+        assertEquals(JwtFailureReason.EXPIRED, exception.getReason());
     }
 }
