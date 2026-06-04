@@ -22,7 +22,7 @@ La API utiliza JSON Web Tokens (JWT). Para acceder a rutas protegidas, debes env
 ```bash
 curl -X POST http://localhost:8080/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin", "password":"admin123"}'
+  -d '{"username":"admin", "password":"Admin123!"}'
 ```
 
 **Registrar nuevo usuario:**
@@ -30,7 +30,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 ```bash
 curl -X POST http://localhost:8080/api/auth/registro \
   -H "Content-Type: application/json" \
-  -d '{"username":"nuevo", "password":"password123"}'
+  -d '{"username":"nuevo", "password":"Password123!"}'
 ```
 
 **Consumir endpoint protegido:**
@@ -39,6 +39,20 @@ curl -X POST http://localhost:8080/api/auth/registro \
 curl -X GET http://localhost:8080/api/ventas \
   -H "Authorization: Bearer <TU_TOKEN_AQUI>"
 ```
+
+### Política de contraseñas
+
+Las contraseñas en registro y alta de usuarios deben cumplir:
+
+* Mínimo 8 caracteres
+* Al menos una mayúscula, una minúscula, un número y un carácter especial (`!@#$%^&*`, etc.)
+
+### Protección del login (entorno local)
+
+* Bloqueo temporal tras intentos fallidos (en memoria; se reinicia al reiniciar la aplicación)
+* Rate limiting por IP en `POST /api/auth/login`
+
+Propiedades configurables en `application.properties` bajo `security.login.*`.
 
 ## Base de datos (entorno local)
 
@@ -49,12 +63,12 @@ curl -X GET http://localhost:8080/api/ventas \
 
 ## Usuarios de prueba
 
-| Usuario   | Contraseña    | Rol      |
-|-----------|---------------|----------|
-| admin     | admin123      | ADMIN    |
-| gerente   | gerente123    | GERENTE  |
-| empleado  | empleado123   | EMPLEADO |
-| cliente   | cliente123    | CLIENTE  |
+| Usuario   | Contraseña     | Rol      |
+|-----------|----------------|----------|
+| admin     | Admin123!      | ADMIN    |
+| gerente   | Gerente123!    | GERENTE  |
+| empleado  | Empleado123!   | EMPLEADO |
+| cliente   | Cliente123!    | CLIENTE  |
 
 ## Roles y permisos
 
