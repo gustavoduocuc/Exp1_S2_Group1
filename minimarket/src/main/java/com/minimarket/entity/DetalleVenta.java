@@ -62,4 +62,8 @@ public class DetalleVenta {
     public void setPrecio(Double precio) {
         this.precio = precio;
     }
+
+    public double calculateSubtotal() {
+        return cantidad * precio;
+    }
 }

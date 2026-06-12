@@ -111,7 +111,12 @@ class SecurityRbacIntegrationTest {
                 RbacScenario.of(HttpMethod.GET, "/api/ventas", null, AccessOutcome.UNAUTHENTICATED),
                 RbacScenario.of(HttpMethod.GET, "/api/ventas", TestRole.CLIENTE, AccessOutcome.FORBIDDEN),
                 RbacScenario.of(HttpMethod.GET, "/api/ventas", TestRole.EMPLEADO, AccessOutcome.AUTHORIZED),
-                RbacScenario.of(HttpMethod.GET, "/api/ventas", TestRole.GERENTE, AccessOutcome.AUTHORIZED)
+                RbacScenario.of(HttpMethod.GET, "/api/ventas", TestRole.GERENTE, AccessOutcome.AUTHORIZED),
+                RbacScenario.of(HttpMethod.POST, "/api/ventas", null, AccessOutcome.UNAUTHENTICATED),
+                RbacScenario.of(HttpMethod.POST, "/api/ventas", TestRole.CLIENTE, AccessOutcome.FORBIDDEN),
+                RbacScenario.of(HttpMethod.POST, "/api/ventas", TestRole.EMPLEADO, AccessOutcome.AUTHORIZED),
+                RbacScenario.of(HttpMethod.POST, "/api/ventas", TestRole.GERENTE, AccessOutcome.AUTHORIZED),
+                RbacScenario.of(HttpMethod.POST, "/api/ventas", TestRole.ADMIN, AccessOutcome.AUTHORIZED)
         );
     }
 

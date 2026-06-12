@@ -52,4 +52,13 @@ public class Venta {
     public void setDetalles(List<DetalleVenta> detalles) {
         this.detalles = detalles;
     }
+
+    public double calculateTotal() {
+        if (detalles == null || detalles.isEmpty()) {
+            return 0.0;
+        }
+        return detalles.stream()
+                .mapToDouble(DetalleVenta::calculateSubtotal)
+                .sum();
+    }
 }
